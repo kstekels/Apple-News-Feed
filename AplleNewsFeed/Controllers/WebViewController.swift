@@ -23,7 +23,7 @@ class WebViewController: UIViewController, WKNavigationDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.title = "WEBKIT"
+        self.title = "WEB"
         
         guard let url = URL(string: urlString) else {return }
         

@@ -11,30 +11,32 @@ import Gloss
 class NewsFeedViewController: UIViewController {
     
     var items: [Item] = []
-    
-    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
+
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Apple News"
-        
         activityIndicatorView.isHidden = true
         activityIndicatorView.style = .large
         tableView.isHidden = true
+        
     }
     
     
     @IBAction func getDataTapped(_ sender: Any) {
-        handleGetData()
         activityIndicator(animated: true)
+        handleGetData()
+        
     }
+    
     
     
     func activityIndicator(animated: Bool){
         DispatchQueue.main.async {
             if animated {
-                self.tableView.isHidden = false
+                
                 self.activityIndicatorView.isHidden = false
                 self.activityIndicatorView.startAnimating()
             }else{
@@ -49,7 +51,7 @@ class NewsFeedViewController: UIViewController {
     
     func handleGetData(){
         
-        let jsonUrl = "http://newsapi.org/v2/everything?q=apple&from=2021-02-11&to=2021-02-11&sortBy=popularity&apiKey=b0a92a85dbef4f428a56c3813499753e"
+        let jsonUrl = "http://newsapi.org/v2/everything?q=apple&from=2021-02-15&to=2021-02-15&sortBy=popularity&apiKey=a473de0095844441bc54bd266083c4f3"
         
         guard let url = URL(string: jsonUrl) else { return }
         
@@ -92,10 +94,16 @@ class NewsFeedViewController: UIViewController {
         items = [Item].from(jsonArray: responseDict) ?? []
         
         DispatchQueue.main.async {
+            self.tableView.isHidden = false
             self.tableView.reloadData()
             self.activityIndicator(animated: false)
         }
         
+    }
+    @IBAction func newsFeedViewControllerInfo(_ sender: Any) {
+        let info = UIAlertController(title: "News Feed Info!", message: "In this section you will find all newest articles about Apple from yesterday, sorted by popular publishers!\nPress on \"search\" 🔍 button to load an articles!", preferredStyle: .alert)
+        info.addAction(UIAlertAction(title: "Close", style: .cancel, handler: nil))
+        self.present(info, animated: true)
     }
     
     
@@ -110,9 +118,6 @@ extension NewsFeedViewController :UITableViewDataSource, UITableViewDelegate {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "feedCell", for: indexPath) as? NewsTableViewCell else {
             return UITableViewCell()
         }
-        
-//        cell.textLabel?.text = items[indexPath.row].title
-//        cell.detailTextLabel?.text = items[indexPath.row].description
   
         let item = items[indexPath.row]
         
@@ -122,11 +127,13 @@ extension NewsFeedViewController :UITableViewDataSource, UITableViewDelegate {
         
         cell.newsTitleLabel.text = item.title
         cell.newsTitleLabel.numberOfLines = 0
+        let date = String(item.publishedAt.prefix(10))
+        self.title = "Apple News (\(date))"
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 120
+        return 100
     }
     
     
@@ -143,7 +150,7 @@ extension NewsFeedViewController :UITableViewDataSource, UITableViewDelegate {
         vc.newsImage = items[indexPath.row].image
         
             
-            navigationController?.pushViewController(vc, animated: true)
+        navigationController?.pushViewController(vc, animated: true)
         }
     }
     

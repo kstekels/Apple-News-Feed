@@ -17,12 +17,14 @@ class Item: JSONDecodable{
     var url: String
     var urlToImage: String
     var image: UIImage?
+    var publishedAt: String
     
     required init?(json: JSON) {
         self.title = "title" <~~ json ?? ""
         self.description = "description" <~~ json ?? ""
         self.url = "url" <~~ json ?? ""
         self.urlToImage = "urlToImage" <~~ json ?? ""
+        self.publishedAt = "publishedAt" <~~ json ?? ""
         
         DispatchQueue.main.async {
             self.image = self.loadImage()

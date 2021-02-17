@@ -21,13 +21,19 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var newsImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var contentTextView: UITextView!
+    @IBOutlet weak var readFullArticleButton: UIButton!
+    @IBOutlet weak var saveButton: UIButton!
     
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        readFullArticleButton.layer.cornerRadius = 25
+        readFullArticleButton.tintColor = .label
+        saveButton.layer.cornerRadius = 25
+        
+        
 
-        self.title = "APPLE"
-        print(webURLString)
+        self.title = "Article"
         
         titleLabel.text = titleString
         contentTextView.text = contentString
