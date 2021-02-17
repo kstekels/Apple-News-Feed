@@ -10,9 +10,9 @@ import CoreData
 
 class DetailViewController: UIViewController {
     
+    //MARK: - Variables & Outlets
     var savedItems = [Items]()
     var context: NSManagedObjectContext?
-    
     var webURLString = String()
     var titleString = String()
     var contentString = String()
@@ -24,7 +24,7 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var readFullArticleButton: UIButton!
     @IBOutlet weak var saveButton: UIButton!
     
-
+    //MARK: - View Did Load
     override func viewDidLoad() {
         super.viewDidLoad()
         readFullArticleButton.layer.cornerRadius = 25
@@ -32,7 +32,7 @@ class DetailViewController: UIViewController {
         saveButton.layer.cornerRadius = 25
         
         
-
+        
         self.title = "Article"
         
         titleLabel.text = titleString
@@ -44,7 +44,7 @@ class DetailViewController: UIViewController {
         
         
     }
-    //
+    //MARK: - Save button action
     @IBAction func savedButtonTapped(_ sender: Any) {
         let newItem = Items(context: self.context!)
         newItem.newsTitle = titleString
@@ -62,7 +62,7 @@ class DetailViewController: UIViewController {
         saveData()
         
     }
-    //
+    //MARK: - Save data
     func saveData() {
         do {
             try context?.save()
@@ -72,7 +72,7 @@ class DetailViewController: UIViewController {
     }
     
     // MARK: - Navigation
-
+    
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destination.
@@ -80,5 +80,5 @@ class DetailViewController: UIViewController {
         // Pass the selected object to the new view controller.
         destination.urlString = webURLString
     }
-
+    
 }

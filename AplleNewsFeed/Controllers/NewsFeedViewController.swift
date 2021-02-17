@@ -10,8 +10,9 @@ import Gloss
 
 class NewsFeedViewController: UIViewController {
     
+    //MARK: - Variables & Outlets
     var items: [Item] = []
-
+    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
     
@@ -24,7 +25,7 @@ class NewsFeedViewController: UIViewController {
         
     }
     
-    
+    //MARK: - Get Data button action
     @IBAction func getDataTapped(_ sender: Any) {
         activityIndicator(animated: true)
         handleGetData()
@@ -32,7 +33,7 @@ class NewsFeedViewController: UIViewController {
     }
     
     
-    
+    //MARK: - Activity indicator
     func activityIndicator(animated: Bool){
         DispatchQueue.main.async {
             if animated {
@@ -49,6 +50,7 @@ class NewsFeedViewController: UIViewController {
         }
     }
     
+    //MARK: - Get Data
     func handleGetData(){
         
         let jsonUrl = "http://newsapi.org/v2/everything?q=apple&from=2021-02-15&to=2021-02-15&sortBy=popularity&apiKey=a473de0095844441bc54bd266083c4f3"
@@ -86,6 +88,7 @@ class NewsFeedViewController: UIViewController {
         task.resume()
     }
     
+    //MARK: - Populate data
     func populateData(_ dict: [String: Any]){
         guard let responseDict = dict["articles"] as? [Gloss.JSON] else {
             return
@@ -100,8 +103,10 @@ class NewsFeedViewController: UIViewController {
         }
         
     }
+    
+    //MARK: - Info button action
     @IBAction func newsFeedViewControllerInfo(_ sender: Any) {
-        let info = UIAlertController(title: "News Feed Info!", message: "In this section you will find all newest articles about Apple from yesterday, sorted by popular publishers!\nPress on \"search\" 🔍 button to load an articles!", preferredStyle: .alert)
+        let info = UIAlertController(title: "News Feed Info!", message: "In this section you will find all newest articles about Apple from yesterday, sorted by popular publishers!\nPress on \"search\" 🔍 button to load the articles!", preferredStyle: .alert)
         info.addAction(UIAlertAction(title: "Close", style: .cancel, handler: nil))
         self.present(info, animated: true)
     }
@@ -109,6 +114,7 @@ class NewsFeedViewController: UIViewController {
     
 }
 
+//MARK: - Extension, Data Source and Delegate
 extension NewsFeedViewController :UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return items.count
@@ -118,7 +124,7 @@ extension NewsFeedViewController :UITableViewDataSource, UITableViewDelegate {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "feedCell", for: indexPath) as? NewsTableViewCell else {
             return UITableViewCell()
         }
-  
+        
         let item = items[indexPath.row]
         
         if let image = item.image {
@@ -132,29 +138,30 @@ extension NewsFeedViewController :UITableViewDataSource, UITableViewDelegate {
         return cell
     }
     
+    //MARK: - Row height
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 100
     }
     
-    
+    //MARK: - Go to article preview
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
         guard let vc = storyboard.instantiateViewController(identifier: "DetailViewController") as? DetailViewController else {
             return
         }
-
+        
         vc.contentString = items[indexPath.row].description
         vc.titleString = items[indexPath.row].title
         vc.webURLString = items[indexPath.row].url
         vc.newsImage = items[indexPath.row].image
         
-            
+        
         navigationController?.pushViewController(vc, animated: true)
-        }
     }
-    
-    
-    
+}
+
+
+
 
 

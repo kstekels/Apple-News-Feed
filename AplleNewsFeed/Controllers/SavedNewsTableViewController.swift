@@ -9,11 +9,13 @@ import UIKit
 import CoreData
 
 class SavedNewsTableViewController: UITableViewController {
-    
+    //MARK: - Variable declaration
     var savedItems = [Items]()
     var context: NSManagedObjectContext?
     var urlStringForSource = Int()
+    @IBOutlet weak var editButtonTitle: UIBarButtonItem!
     
+    //MARK: - View Did Load
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.reloadData()
@@ -37,12 +39,17 @@ class SavedNewsTableViewController: UITableViewController {
         loadData()
         countItems()
     }
-    
+    //MARK: - Edit button
     @IBAction func startEditing(_ sender: Any) {
         tableView.isEditing = !tableView.isEditing
+        if tableView.isEditing{
+            editButtonTitle.title = "Save"
+        }else{
+            editButtonTitle.title = "Edit"
+        }
     }
     
-    
+    //MARK: - View will Appear
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         tableView.isEditing = false
@@ -51,7 +58,7 @@ class SavedNewsTableViewController: UITableViewController {
         countItems()
         
     }
-    
+    //MARK: - Save Data
     func saveData() {
         do {
             try self.context?.save()
@@ -61,7 +68,7 @@ class SavedNewsTableViewController: UITableViewController {
         loadData()
         countItems()
     }
-    
+    //MARK: - Load data
     func loadData(){
         
         
@@ -83,7 +90,7 @@ class SavedNewsTableViewController: UITableViewController {
         let itemsInTable = String(self.tableView.numberOfRows(inSection: 0))
         self.title = "Saved(\(itemsInTable))"
     }
-    
+    //MARK: - Info Button Action
     @IBAction func infoButtonPressed(_ sender: Any) {
         let info = UIAlertController(title: "Saved News Info!", message: "In this section you will find your saved articles. If you decide to delete some articles, you can do it by using \"Edit\" button and click on delete symbol, or alternative way is to pointer on related article and swipe from right side the left, then press \"delete\"!", preferredStyle: .alert)
         info.addAction(UIAlertAction(title: "Close", style: .cancel, handler: nil))
@@ -95,7 +102,7 @@ class SavedNewsTableViewController: UITableViewController {
     //        // #warning Incomplete implementation, return the number of sections
     //        return 1
     //    }
-    
+    //MARK: - Number of Rows in Cell
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return savedItems.count
@@ -103,7 +110,7 @@ class SavedNewsTableViewController: UITableViewController {
     
     
     
-    
+    //MARK: - Write items in cell
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "savedFeedCell", for: indexPath) as? NewsTableViewCell else{
             return UITableViewCell()
@@ -121,6 +128,7 @@ class SavedNewsTableViewController: UITableViewController {
         return cell
     }
     
+    //MARK: - Cell height
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 100
     }
@@ -132,6 +140,7 @@ class SavedNewsTableViewController: UITableViewController {
      return true
      }
      */
+    //MARK: - Go to Web View
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
@@ -145,13 +154,11 @@ class SavedNewsTableViewController: UITableViewController {
     
     
     
-    //MARK: - Deleting and editing
+    //MARK: - Rearranging
     // Override to support conditional rearranging of the table view.
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         return true
     }
-    
-    
     // Override to support rearranging the table view.
     override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
         
@@ -161,7 +168,7 @@ class SavedNewsTableViewController: UITableViewController {
         
         
     }
-    
+    //MARK: - Deleting
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let alert = UIAlertController(title: "Delete", message: "Are you sure you want to delete?", preferredStyle: .alert)
