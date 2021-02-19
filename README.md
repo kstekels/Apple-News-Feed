@@ -1,4 +1,4 @@
-# Apple-News-Feed-Modified
+# Apple-News-Feed
 
 All articles mentioning Apple from yesterday, sorted by popular publishers first
 
